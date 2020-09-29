@@ -33,58 +33,82 @@ int Min(int a, int b)
 int* LongAdd(int A[], int B[], int a_length, int b_length)
 {
 	int c = Max(a_length, b_length);
-	int* Answer = new int[c];
+	int* Answer = new int[c+1];
 	int i = c-1;
 	for (int k = 0; k < c; k++)
 	{
 		Answer[k] = 0;
 	}
-	while (i != -1)
+	while (i != Max(a_length, b_length) - Min(a_length, b_length) - 1 && a_length != b_length)
 	{
 		for (int j = 1; j < Min(a_length, b_length)+1; j++)
 		{
 			int temp = A[a_length - j] + B[b_length - j];
 			if (temp > 15)
 			{
-				Answer[i + 1] = temp - (temp / 16) * 16;
-				Answer[i] = (temp / 16);
+				Answer[i] = temp - (temp / 16) * 16;
+				Answer[i-1] = (temp / 16);
 			}
 			else {
-				Answer[i + 1] =Answer[i+1] + temp;
+				Answer[i] =Answer[i] + temp;
 			}
 			i--;
 		}
 	}
 	if (a_length != b_length)
 	{
-		for (i == Min(a_length, b_length) + 1; i < Max(a_length, b_length) + 1; i++)
+		for (i == Min(a_length, b_length); i > 0; i--)
 		{
 			if (Max(a_length, b_length) == a_length)
 			{
-				Answer[i] = A[a_length - i];
+				Answer[i] = A[a_length - i - 1];
+				Answer[0] = A[0];
 			}
 			if (Max(a_length, b_length) == b_length) {
-				Answer[i] = B[b_length - i];
+				Answer[i] = B[b_length - i - 1];
+				Answer[0] = B[0];
 			}
 		}
+
 	}
-	if (Answer[1] > 15)
+	if (a_length = b_length)
 	{
-		if (Max(a_length, b_length) == a_length)
+		for (i = 1; i < a_length; i++)
 		{
-			Answer[0] = A[0]/16;
+			int temp = A[a_length - i] + B[b_length - i];
+			if (temp > 15)
+			{
+				Answer[c - i] = temp - (temp / 16) * 16;
+				Answer[c - i - 1] = (temp / 16);
+			}
+			else {
+				Answer[c-i] = Answer[c-i] + temp;
+			}
 		}
-		if (Max(a_length, b_length) == b_length)
+		Answer[0] = Answer[0] + A[0] + B[0];
+	}
+	if (Answer[0] > 15)
+	{
+		for (i = c; i >0; i--)
 		{
-			Answer[0] = B[0] / 16;
+			Answer[i] = Answer[i - 1];
 		}
-		else {
-			Answer[0] = (A[0]+B[0])/16;
+		Answer[1] = Answer[1]- ((Answer[1]) / 16) * 16;
+		Answer[0] = Answer[0]/16;
+		cout << "ÐžÑ‚Ð²ÐµÑ‚:" << endl;
+		for (int i = 0; i < c + 1; i++)
+		{
+			cout << Answer[i] << "  ";
 		}
 	}
-	for (int i = 0; i < c+1; i++)
+	else if (Answer[0] < 16)
 	{
-		std::cout << Answer[i] << "  ";
+		Answer[0] = Answer[0] / 16;
+		cout << "ÐžÑ‚Ð²ÐµÑ‚:" << endl;
+		for (int i = 0; i < c; i++)
+		{
+			cout << Answer[i] << "  ";
+		}
 	}
 	cout << endl;
 	return Answer;
@@ -104,9 +128,9 @@ int main()
 	int *Answer;
 	int* integ_A = A;
 	int* integ_B = B;
-	cout << "×èñëî à:" << endl;
+	cout << "Ð§Ð¸ÑÐ»Ð¾ Ð°:" << endl;
 	cin >> a;
-	cout << "×èñëî b:" << endl;
+	cout << "Ð§Ð¸ÑÐ»Ð¾ b:" << endl;
 	cin >> b;
 	a_length = a.length();
 	b_length = b.length();
