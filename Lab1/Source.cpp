@@ -48,21 +48,9 @@ int* LongAdd(int A[], int B[], int a_length, int b_length)
 			{
 				Answer[i] = Answer[i] + temp - (temp / 16) * 16;
 				Answer[i - 1] = Answer[i - 1] + (temp / 16);
-				//cout << "Это из цикла while, if" << endl;
-				//cout << "Answer[" << i << "] = " << Answer[i] << endl;
-				//cout << "Answer[" << i - 1 << "] = " << Answer[i - 1] << endl;
-				//cout << endl;
 			}
-			/*else if (Answer[c - i] + temp > 15)
-			{
-				Answer[c - i - 1] = ((Answer[c - i] + temp) / 16);
-				Answer[c - i] = (Answer[c - i] + temp) - ((Answer[c - i] + temp) / 16) * 16;
-			}*/
 			else {
 				Answer[i] =Answer[i] + temp;
-				//cout << "Это из цикла while, else" << endl;
-				//cout << "Answer[" << i << "] = " << Answer[i] << endl;
-				//cout << endl;
 			}
 			i--;
 		}
@@ -74,15 +62,9 @@ int* LongAdd(int A[], int B[], int a_length, int b_length)
 			if (Max(a_length, b_length) == a_length)
 			{
 				Answer[c - i - 1] = Answer[c - i - 1] + A[a_length - i - 1];
-				//cout << "Это из if, когда разной длины числа, А>В:" << endl;
-				//cout << "Answer[" << c - i - 1 << "] = " << Answer[c - i - 1] << endl;
-				//cout << endl;
 			}
 			if (Max(a_length, b_length) == b_length) {
 				Answer[c - i - 1] = Answer[c - i - 1] + B[b_length - i - 1];
-				//cout << "Это из if, когда разной длины числа, А<В:" << endl;
-				//cout << "Answer[" << c - i - 1 << "] = " << Answer[c - i - 1] << endl;
-				//cout << endl;
 			}
 		}
 
@@ -96,31 +78,17 @@ int* LongAdd(int A[], int B[], int a_length, int b_length)
 			{
 				Answer[c - i] = Answer[c - i] + (temp - (temp / 16) * 16);
 				Answer[c - i - 1] = Answer[c - i - 1] + (temp / 16);
-				//cout << "Это из else if, когда одинаковой длины числа, if:" << endl;
-				//cout << "Answer[" << c - i << "] = " << Answer[c - i] << endl;
-				//cout << "Answer[" << c - i - 1 << "] = " << Answer[c - i - 1] << endl;
-				//cout << endl;
 			}
 			else if (Answer[c - i] + temp > 15)
 			{
 				Answer[c - i - 1] = ((Answer[c - i] + temp) / 16);
 				Answer[c - i] = (Answer[c-i] +temp) - ((Answer[c-i] + temp) / 16) * 16;
-				//cout << "Это из else if, когда одинаковой длины числа, else if:" << endl;
-				//cout << "Answer[" << c - i - 1 << "] = " << Answer[c - i - 1] << endl;
-				//cout << "Answer[" << c - i << "] = " << Answer[c - i] << endl;
-				//cout << endl;
 			}
 			else {
 				Answer[c-i] = Answer[c-i] + temp;
-				//cout << "Это из else if, когда одинаковой длины числа, else:" << endl;
-				//cout << "Answer[" << c - i << "] = " << Answer[c - i] << endl;
-				//cout << endl;
 			}
 		}
 		Answer[0] = Answer[0] + A[0] + B[0];
-		//cout << "Это из else if, когда одинаковой длины числа:" << endl;
-		//cout << "Answer[" << 0 << "] = " << Answer[0] << endl;
-		//cout << endl;
 	}
 	if (Answer[0] > 15)
 	{
@@ -148,6 +116,97 @@ int* LongAdd(int A[], int B[], int a_length, int b_length)
 	return Answer;
 }
 
+int* LongSub(int A[], int B[], int a_length, int b_length)
+{
+	int c = Max(a_length, b_length);
+	int borrow =  0;
+	int* Answer = new int[c+1];
+	int i = c - 1;
+	for (int k = 0; k < c+1; k++)
+	{
+		Answer[k] = 0;
+	}
+	while (i != Max(a_length, b_length) - Min(a_length, b_length) - 1 && a_length != b_length)
+	{
+		for (int j = 1; j < Min(a_length, b_length) + 1; j++)
+		{
+			int temp = A[a_length - j] - B[b_length - j];
+			if (temp < 0)
+			{
+				borrow++;
+				A[a_length - j] = A[a_length - j] + 15;
+				if (A[a_length - j - 1] == 0)
+				{
+					int k = 1;
+					while (A[a_length - j - 1 - k] == 0)
+					{
+						A[a_length - j - 1 - k] = A[a_length - j - 1 - k] - 1;
+						if (A[a_length - j - 1 - k] < 0)
+						{
+							k++;
+							A[a_length - j - 1 - k] = A[a_length - j - 1 - k] - 1;
+							A[a_length - j - k] = A[a_length - j - k] + 15;
+						}
+						else {
+							A[a_length - j - k] = A[a_length - j - k] + 15;
+							break;
+						}
+					}
+				}
+				A[a_length - j - 1] = A[a_length - j - 1] - 1;
+				temp;
+				Answer[i] = Answer[i] + temp;
+				borrow --;
+			}
+			else {
+				Answer[i] = Answer[i] + temp;
+			}
+			i--;
+		}
+	}
+	if (a_length != b_length)
+	{
+		for (i = Min(a_length, b_length); i < Max(a_length, b_length); i++)
+		{
+			Answer[c - i - 1] = Answer[c - i - 1] + A[a_length - i - 1];
+		}
+
+	}
+	else if (a_length = b_length)
+	{
+		for (i = 1; i < a_length; i++)
+		{
+			int temp = A[a_length - i] - B[b_length - i];
+			if (temp < 0)
+			{
+				borrow++;
+				A[a_length - i] = A[a_length - i] + 15;
+				A[a_length - i - 1] = A[a_length - i - 1] - 1;
+				temp = A[a_length - i] - B[b_length - i];
+				Answer[c - i] = Answer[c - i] + temp;
+				borrow--;
+			}
+			else {
+				Answer[c - i] = Answer[c - i] + temp;
+			}
+		}
+		Answer[0] = Answer[0] + A[0] - B[0];
+	}
+	if (Answer[0] < 0)
+	{
+		borrow++;
+		Answer[c] = borrow;
+	}
+	else {
+		cout << "Ответ:" << endl;
+		for (int i = 0; i < c; i++)
+		{
+			cout << Answer[i] << "  ";
+		}
+	}
+	cout << endl;
+	return Answer;
+}
 
 int main()
 {
@@ -159,7 +218,8 @@ int main()
 	int b_length;
 	int A[1000];
 	int B[1000];
-	int *Answer;
+	int* AnswerAdd;
+	int* AnswerSub;
 	int* integ_A = A;
 	int* integ_B = B;
 	cout << "Число а:" << endl;
@@ -198,43 +258,91 @@ int main()
 		cout << B[i] << " ";
 	}
 	cout << endl;
-	Answer = LongAdd(integ_A, integ_B, a_length, b_length);
+	AnswerAdd = LongAdd(integ_A, integ_B, a_length, b_length);
 	string Answer1;
 	for (i = 0; i < Max(a_length, b_length) + 1; i++)
 	{
-		if (Answer[i] == 10)
+		if (AnswerAdd[i] == 10)
 		{
 			Answer1 = Answer1 + "A";
 		}
-		else if (Answer[i] == 11)
+		else if (AnswerAdd[i] == 11)
 		{
 			Answer1 = Answer1 + "B";
 		}
-		else if (Answer[i] == 12)
+		else if (AnswerAdd[i] == 12)
 		{
 			Answer1 = Answer1 + "C";
 		}
-		else if (Answer[i] == 13)
+		else if (AnswerAdd[i] == 13)
 		{
 			Answer1 = Answer1 + "D";
 		}
-		else if (Answer[i] == 14)
+		else if (AnswerAdd[i] == 14)
 		{
 			Answer1 = Answer1 + "E";
 		}
-		else if (Answer[i] == 15)
+		else if (AnswerAdd[i] == 15)
 		{
 			Answer1 = Answer1 + "F";
 		}
-		else if (Answer[i]<10){
-			Answer1 += to_string(Answer[i]);
+		else if (AnswerAdd[i] < 10){
+			Answer1 += to_string(AnswerAdd[i]);
 		}
 	}
-	cout << "Ответ в 16-чной системе исчисления:" << endl;
+	cout << "Результат А + В в 16-чной системе исчисления:" << endl;
 	cout << Answer1;
 	cout << endl;
-	delete [] Answer;
-	//int A[1000] = {0};
-	//int B[1000] = {0};
+	delete [] AnswerAdd;
+	cout << endl;
+	cout << "Отнимаем число В от числа А" << endl;
+	string Answer2;
+	if (a_length < b_length)
+	{	
+		Answer2 = "Ошибка!!! От числа меньшей длины отнимаем число большей длины!";
+		cout << Answer2 << endl;
+	}
+	else {
+		AnswerSub = LongSub(integ_A, integ_B, a_length, b_length);
+		if (AnswerSub[Max(a_length, b_length)] == 1)
+		{
+			Answer2 = "Отрицательное значение!!! ";
+		}
+		else {
+			for (i = 0; i < Max(a_length, b_length); i++)
+			{
+				if (AnswerSub[i] == 10)
+				{
+					Answer2 = Answer2 + "A";
+				}
+				else if (AnswerSub[i] == 11)
+				{
+					Answer2 = Answer2 + "B";
+				}
+				else if (AnswerSub[i] == 12)
+				{
+					Answer2 = Answer2 + "C";
+				}
+				else if (AnswerSub[i] == 13)
+				{
+					Answer2 = Answer2 + "D";
+				}
+				else if (AnswerSub[i] == 14)
+				{
+					Answer2 = Answer2 + "E";
+				}
+				else if (AnswerSub[i] == 15)
+				{
+					Answer2 = Answer2 + "F";
+				}
+				else if (AnswerSub[i] < 10) {
+					Answer2 += to_string(AnswerSub[i]);
+				}
+			}
+		}
+	cout << "Результат А - В в 16-чной системе исчисления:" << endl;
+	cout << Answer2 << endl;
+	}
+	delete[] AnswerSub;
 	return 0;
 }
