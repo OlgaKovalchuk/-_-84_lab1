@@ -33,15 +33,15 @@ int Min(int a, int b)
 int* LongAdd(int A[], int B[], int a_length, int b_length)
 {
 	int c = Max(a_length, b_length);
-	int* Answer = new int[c+1];
-	int i = c-1;
-	for (int k = 0; k < c; k++)
+	int* Answer = new int[c + 2];
+	int i = c - 1;
+	for (int k = 0; k < c + 2; k++)
 	{
 		Answer[k] = 0;
 	}
 	while (i != Max(a_length, b_length) - Min(a_length, b_length) - 1 && a_length != b_length)
 	{
-		for (int j = 1; j < Min(a_length, b_length)+1; j++)
+		for (int j = 1; j < Min(a_length, b_length) + 1; j++)
 		{
 			int temp = A[a_length - j] + B[b_length - j];
 			if (temp > 15)
@@ -50,7 +50,7 @@ int* LongAdd(int A[], int B[], int a_length, int b_length)
 				Answer[i - 1] = Answer[i - 1] + (temp / 16);
 			}
 			else {
-				Answer[i] =Answer[i] + temp;
+				Answer[i] = Answer[i] + temp;
 			}
 			i--;
 		}
@@ -82,22 +82,23 @@ int* LongAdd(int A[], int B[], int a_length, int b_length)
 			else if (Answer[c - i] + temp > 15)
 			{
 				Answer[c - i - 1] = ((Answer[c - i] + temp) / 16);
-				Answer[c - i] = (Answer[c-i] +temp) - ((Answer[c-i] + temp) / 16) * 16;
+				Answer[c - i] = (Answer[c - i] + temp) - ((Answer[c - i] + temp) / 16) * 16;
 			}
 			else {
-				Answer[c-i] = Answer[c-i] + temp;
+				Answer[c - i] = Answer[c - i] + temp;
 			}
 		}
 		Answer[0] = Answer[0] + A[0] + B[0];
 	}
 	if (Answer[0] > 15)
 	{
-		for (i = c; i >0; i--)
+		for (i = c; i > 0; i--)
 		{
 			Answer[i] = Answer[i - 1];
 		}
-		Answer[1] = Answer[1]- ((Answer[1]) / 16) * 16;
-		Answer[0] = Answer[0]/16;
+		Answer[1] = Answer[1] - ((Answer[1]) / 16) * 16;
+		Answer[0] = Answer[0] / 16;
+		Answer[c + 1] = 100;
 		cout << "Ответ:" << endl;
 		for (int i = 0; i < c + 1; i++)
 		{
@@ -119,10 +120,10 @@ int* LongAdd(int A[], int B[], int a_length, int b_length)
 int* LongSub(int A[], int B[], int a_length, int b_length)
 {
 	int c = Max(a_length, b_length);
-	int borrow =  0;
-	int* Answer = new int[c+1];
+	int borrow = 0;
+	int* Answer = new int[c + 1];
 	int i = c - 1;
-	for (int k = 0; k < c+1; k++)
+	for (int k = 0; k < c + 1; k++)
 	{
 		Answer[k] = 0;
 	}
@@ -154,9 +155,9 @@ int* LongSub(int A[], int B[], int a_length, int b_length)
 					}
 				}
 				A[a_length - j - 1] = A[a_length - j - 1] - 1;
-				temp;
+				temp = A[a_length - j] - B[b_length - j];
 				Answer[i] = Answer[i] + temp;
-				borrow --;
+				borrow--;
 			}
 			else {
 				Answer[i] = Answer[i] + temp;
@@ -208,6 +209,58 @@ int* LongSub(int A[], int B[], int a_length, int b_length)
 	return Answer;
 }
 
+int* LongMulOneDigit(int A[], int b, int a_length)
+{
+	int c = a_length;
+	int* Answer = new int[c + 1];
+	for (int k = 0; k < c + 1; k++)
+	{
+		Answer[k] = 0;
+	}
+	for (int j = c - 1; j > 0; j--)
+	{
+		int temp = A[j] * b;
+		if (temp > 15)
+		{
+			Answer[j] = Answer[j] + temp - (temp / 16) * 16;
+			Answer[j - 1] = Answer[j - 1] + (temp / 16);
+		}
+		else {
+			Answer[j] = Answer[j] + temp;
+			if (Answer[j] > 15)
+			{
+				Answer[j] = Answer[j] - (Answer[j] / 16) * 16;
+				Answer[j - 1] = Answer[j - 1] + (Answer[j] / 16);
+			}
+		}
+	}
+	Answer[0] = Answer[0] + A[0] * b;
+	if(Answer[0] > 15)
+	{
+		for (int i = c; i > 0; i--)
+		{
+			Answer[i] = Answer[i - 1];
+		}
+		Answer[1] = Answer[1] - ((Answer[1]) / 16) * 16;
+		Answer[0] = Answer[0] / 16;
+		cout << "Ответ:" << endl;
+		for (int i = 0; i < c + 1; i++)
+		{
+			cout << Answer[i] << "  ";
+		}
+	}
+	else if (Answer[0] < 16)
+	{
+		cout << "Ответ:" << endl;
+		for (int i = 0; i < c; i++)
+		{
+			cout << Answer[i] << "  ";
+		}
+	}
+	cout << endl;
+	return Answer;
+}
+
 int main()
 {
 	setlocale(LC_ALL, "ru_RU");
@@ -220,6 +273,7 @@ int main()
 	int B[1000];
 	int* AnswerAdd;
 	int* AnswerSub;
+	int* AnswerMulOneDigit;
 	int* integ_A = A;
 	int* integ_B = B;
 	cout << "Число а:" << endl;
@@ -228,7 +282,7 @@ int main()
 	cin >> b;
 	a_length = a.length();
 	b_length = b.length();
-	for (i = 0; i<a_length; i++)
+	for (i = 0; i < a_length; i++)
 	{
 		if (isdigit(a.at(i)) == 0)
 		{
@@ -260,45 +314,117 @@ int main()
 	cout << endl;
 	AnswerAdd = LongAdd(integ_A, integ_B, a_length, b_length);
 	string Answer1;
-	for (i = 0; i < Max(a_length, b_length) + 1; i++)
+	if (AnswerAdd[Max(a_length, b_length) + 1] == 100)
 	{
-		if (AnswerAdd[i] == 10)
+		for (i = 0; i < Max(a_length, b_length) + 1; i++)
 		{
-			Answer1 = Answer1 + "A";
+			if (AnswerAdd[i] == 10)
+			{
+				Answer1 = Answer1 + "A";
+			}
+			else if (AnswerAdd[i] == 11)
+			{
+				Answer1 = Answer1 + "B";
+			}
+			else if (AnswerAdd[i] == 12)
+			{
+				Answer1 = Answer1 + "C";
+			}
+			else if (AnswerAdd[i] == 13)
+			{
+				Answer1 = Answer1 + "D";
+			}
+			else if (AnswerAdd[i] == 14)
+			{
+				Answer1 = Answer1 + "E";
+			}
+			else if (AnswerAdd[i] == 15)
+			{
+				Answer1 = Answer1 + "F";
+			}
+			else if (AnswerAdd[i] < 10) {
+				Answer1 += to_string(AnswerAdd[i]);
+			}
 		}
-		else if (AnswerAdd[i] == 11)
+	}
+	else if (AnswerAdd[Max(a_length, b_length) + 1] == 0)
+	{
+		for (i = 0; i < Max(a_length, b_length); i++)
 		{
-			Answer1 = Answer1 + "B";
-		}
-		else if (AnswerAdd[i] == 12)
-		{
-			Answer1 = Answer1 + "C";
-		}
-		else if (AnswerAdd[i] == 13)
-		{
-			Answer1 = Answer1 + "D";
-		}
-		else if (AnswerAdd[i] == 14)
-		{
-			Answer1 = Answer1 + "E";
-		}
-		else if (AnswerAdd[i] == 15)
-		{
-			Answer1 = Answer1 + "F";
-		}
-		else if (AnswerAdd[i] < 10){
-			Answer1 += to_string(AnswerAdd[i]);
+			if (AnswerAdd[i] == 10)
+			{
+				Answer1 = Answer1 + "A";
+			}
+			else if (AnswerAdd[i] == 11)
+			{
+				Answer1 = Answer1 + "B";
+			}
+			else if (AnswerAdd[i] == 12)
+			{
+				Answer1 = Answer1 + "C";
+			}
+			else if (AnswerAdd[i] == 13)
+			{
+				Answer1 = Answer1 + "D";
+			}
+			else if (AnswerAdd[i] == 14)
+			{
+				Answer1 = Answer1 + "E";
+			}
+			else if (AnswerAdd[i] == 15)
+			{
+				Answer1 = Answer1 + "F";
+			}
+			else if (AnswerAdd[i] < 10) {
+				Answer1 += to_string(AnswerAdd[i]);
+			}
 		}
 	}
 	cout << "Результат А + В в 16-чной системе исчисления:" << endl;
 	cout << Answer1;
 	cout << endl;
-	delete [] AnswerAdd;
+	delete[] AnswerAdd;
+	cout << endl;
+	AnswerMulOneDigit = LongMulOneDigit(integ_A, 3, a_length);
+	string Answer3;
+	for (i = 0; i < a_length + 1; i++)
+	{
+		if (AnswerMulOneDigit[i] == 10)
+		{
+			Answer3 = Answer3 + "A";
+		}
+		else if (AnswerMulOneDigit[i] == 11)
+		{
+			Answer3 = Answer3 + "B";
+		}
+		else if (AnswerMulOneDigit[i] == 12)
+		{
+			Answer3 = Answer3 + "C";
+		}
+		else if (AnswerMulOneDigit[i] == 13)
+		{
+			Answer3 = Answer3 + "D";
+		}
+		else if (AnswerMulOneDigit[i] == 14)
+		{
+			Answer3 = Answer3 + "E";
+		}
+		else if (AnswerMulOneDigit[i] == 15)
+		{
+			Answer3 = Answer3 + "F";
+		}
+		else if (AnswerMulOneDigit[i] < 10) {
+			Answer3 += to_string(AnswerMulOneDigit[i]);
+		}
+	}
+	cout << "Результат А * 3 в 16-чной системе исчисления:" << endl;
+	cout << Answer3 <<endl;
+	delete[]AnswerMulOneDigit;
 	cout << endl;
 	cout << "Отнимаем число В от числа А" << endl;
 	string Answer2;
 	if (a_length < b_length)
-	{	
+	{
 		Answer2 = "Ошибка!!! От числа меньшей длины отнимаем число большей длины!";
 		cout << Answer2 << endl;
 	}
@@ -340,9 +466,9 @@ int main()
 				}
 			}
 		}
-	cout << "Результат А - В в 16-чной системе исчисления:" << endl;
-	cout << Answer2 << endl;
+		cout << "Результат А - В в 16-чной системе исчисления:" << endl;
+		cout << Answer2 << endl;
+		delete[] AnswerSub;
 	}
-	delete[] AnswerSub;
 	return 0;
 }
