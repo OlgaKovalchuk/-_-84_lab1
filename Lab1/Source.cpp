@@ -209,7 +209,7 @@ int* LongSub(int A[], int B[], int a_length, int b_length)
 	return Answer;
 }
 
-int* LongMulOneDigit(int A[], int b, int a_length)
+int* LongMulOneDigit(int A[], string digit, int a_length)
 {
 	int c = a_length;
 	int* Answer = new int[c + 1];
@@ -217,9 +217,19 @@ int* LongMulOneDigit(int A[], int b, int a_length)
 	{
 		Answer[k] = 0;
 	}
+	int digit_from_str;
+	if (isdigit(digit.at(0)) == 0)
+	{
+		digit_from_str = digit.at(0) - '0' - 7;
+	}
+	else {
+		digit_from_str = digit.at(0) - '0';
+	}
+	cout << "Наша константа в 16-чной системе исчисления:" << endl;
+	cout << digit_from_str << endl;
 	for (int j = c - 1; j > 0; j--)
 	{
-		int temp = A[j] * b;
+		int temp = A[j] * digit_from_str;
 		if (temp > 15)
 		{
 			Answer[j] = Answer[j] + temp - (temp / 16) * 16;
@@ -234,7 +244,7 @@ int* LongMulOneDigit(int A[], int b, int a_length)
 			}
 		}
 	}
-	Answer[0] = Answer[0] + A[0] * b;
+	Answer[0] = Answer[0] + A[0] * digit_from_str;
 	if(Answer[0] > 15)
 	{
 		for (int i = c; i > 0; i--)
@@ -385,7 +395,11 @@ int main()
 	cout << endl;
 	delete[] AnswerAdd;
 	cout << endl;
-	AnswerMulOneDigit = LongMulOneDigit(integ_A, 3, a_length);
+	string digit;
+	cout << "Умножение числа А на константу" << endl;
+	cout << "Введите значение константы:" << endl;
+	cin >> digit;
+	AnswerMulOneDigit = LongMulOneDigit(integ_A, digit, a_length);
 	string Answer3;
 	for (i = 0; i < a_length + 1; i++)
 	{
@@ -417,7 +431,7 @@ int main()
 			Answer3 += to_string(AnswerMulOneDigit[i]);
 		}
 	}
-	cout << "Результат А * 3 в 16-чной системе исчисления:" << endl;
+	cout << "Результат (число) А * (константа) " <<digit<<" в 16-чной системе исчисления:" << endl;
 	cout << Answer3 <<endl;
 	delete[]AnswerMulOneDigit;
 	cout << endl;
