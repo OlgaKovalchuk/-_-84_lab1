@@ -209,7 +209,7 @@ int* LongSub(int A[], int B[], int a_length, int b_length)
 	return Answer;
 }
 
-int* LongMulOneDigit(int A[], string digit, int a_length)
+int* LongMulOneDigit(int A[], int digit_from_str, int a_length)
 {
 	int c = a_length;
 	int* Answer = new int[c + 1];
@@ -217,16 +217,6 @@ int* LongMulOneDigit(int A[], string digit, int a_length)
 	{
 		Answer[k] = 0;
 	}
-	int digit_from_str;
-	if (isdigit(digit.at(0)) == 0)
-	{
-		digit_from_str = digit.at(0) - '0' - 7;
-	}
-	else {
-		digit_from_str = digit.at(0) - '0';
-	}
-	cout << "Наша константа в 16-чной системе исчисления:" << endl;
-	cout << digit_from_str << endl;
 	for (int j = c - 1; j > 0; j--)
 	{
 		int temp = A[j] * digit_from_str;
@@ -270,6 +260,27 @@ int* LongMulOneDigit(int A[], string digit, int a_length)
 	cout << endl;
 	return Answer;
 }
+
+/*int* LongMul(int A[], int B[], int a_length, int b_length)
+{
+	int c = Max(a_length, b_length);
+	int* Answer = new int[2*c];
+	int i = 2*c - 1;
+	int* temp1;
+	int* temp2;
+	for (int k = 0; k < 2*c + 1; k++)
+	{
+		Answer[k] = 0;
+	}
+	for (int i = 1; i < c + 1; i++)
+	{
+		temp1 = LongMulOneDigit(A, B[b_length - i], a_length);
+		Answer[2 * c - i] = Answer[2*c - i] + temp1[i - 1];
+		temp2 = LongMulOneDigit(A, B[b_length - i -1], a_length);
+		Answer[2 * c - i - 1] = Answer[2 * c - i - 1] + temp2[i - 1];
+	}
+	return Answer;
+}*/
 
 int main()
 {
@@ -399,7 +410,17 @@ int main()
 	cout << "Умножение числа А на константу" << endl;
 	cout << "Введите значение константы:" << endl;
 	cin >> digit;
-	AnswerMulOneDigit = LongMulOneDigit(integ_A, digit, a_length);
+	int digit_from_str;
+	if (isdigit(digit.at(0)) == 0)
+	{
+		digit_from_str = digit.at(0) - '0' - 7;
+	}
+	else {
+		digit_from_str = digit.at(0) - '0';
+	}
+	cout << "Наша константа в 16-чной системе исчисления:" << endl;
+	cout << digit_from_str << endl;
+	AnswerMulOneDigit = LongMulOneDigit(integ_A, digit_from_str, a_length);
 	string Answer3;
 	for (i = 0; i < a_length + 1; i++)
 	{
@@ -435,6 +456,8 @@ int main()
 	cout << Answer3 <<endl;
 	delete[]AnswerMulOneDigit;
 	cout << endl;
+	//int* AnswerLongMul;
+	//AnswerLongMul = LongMul(integ_A, integ_B, a_length, b_length);
 	cout << "Отнимаем число В от числа А" << endl;
 	string Answer2;
 	if (a_length < b_length)
