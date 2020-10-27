@@ -297,56 +297,131 @@ int* LongMul(int A[], int B[], int a_length, int b_length)
 		Answer1[2 * c - i] = Answer1[2 * c - i] + temp1[c - i + 1];
 		cout << "Answer1 [" << 2 * c - i << "] = " << Answer1[2 * c - i] << endl;
 	}*/
-	for (int j = 1; j < b_length; j++)
+	if (b_length > 1)
 	{
-		temp2 = LongMulOneDigit(A, B[b_length - j - 1], a_length);
-		if (temp2[c+1] == 0)
+		for (int j = 1; j < b_length; j++)
 		{
-			for (int i = 1; i < c + 1; i++)
+			temp2 = LongMulOneDigit(A, B[b_length - j - 1], a_length);
+			if (temp2[c + 1] == 0)
 			{
-				Answer2[2 * c - i - j] = Answer2[2 * c - i - j] + temp2[c - i];
+				for (int i = 1; i < c + 1; i++)
+				{
+					Answer2[2 * c - i - j] = Answer2[2 * c - i - j] + temp2[c - i];
+				}
 			}
-		}
-		else if(temp2[c+1] == 17){
-			for (int i = 1; i < c + 2; i++)
+			else if (temp2[c + 1] == 17) {
+				for (int i = 1; i < c + 2; i++)
+				{
+					Answer2[2 * c - i - j] = Answer2[2 * c - i - j] + temp2[c - i + 1];
+				}
+			}
+			/*cout << "Answer1:" << endl;
+			for (int i = 0; i < 2 * c; i++)
 			{
-				Answer2[2 * c - i - j] = Answer2[2 * c - i - j] + temp2[c - i + 1];
+				cout << "Answer1[" <<i<<"] = " <<Answer1[i]<< endl;
 			}
-		}
-		/*for (int i = 1; i < c + 2; i++)
-		{
-			if (temp2[c] == 0)
+			cout << "Answer2:" << endl;
+			for (int i = 0; i < 2 * c; i++)
 			{
-				Answer2[2 * c - i - j] = Answer2[2 * c - i - j] + temp2[c - i];
+				cout << "Answer2[" << i << "] = " << Answer2[i] << endl;
+			}*/
+			Answer3 = LongAdd(Answer1, Answer2, 2 * c, 2 * c);
+			for (int k = 0; k < 2 * c; k++)
+			{
+				Answer2[k] = 0;
+				Answer1[k] = Answer3[k];
 			}
-			else {
-				Answer2[2 * c - i - j] = Answer2[2 * c - i - j] + temp2[c - i + 1];
-			}
-			//Answer2[2 * c - i - j] = Answer2[2 * c - i - j] + temp2[c - i + 1];
-		}*/
-		/*cout << "Answer1:" << endl;
-		for (int i = 0; i < 2 * c; i++)
-		{
-			cout << "Answer1[" <<i<<"] = " <<Answer1[i]<< endl;
+			/*for (int k = 0; k < 2 * c; k++)
+			{
+				cout << "Answer1 [" << k << "] = " << Answer1[k] << "   " << "Answer3 [" << k << "] = " << Answer3[k] << endl;
+			}*/
 		}
-		cout << "Answer2:" << endl;
-		for (int i = 0; i < 2 * c; i++)
-		{
-			cout << "Answer2[" << i << "] = " << Answer2[i] << endl;
-		}*/
-		Answer3 = LongAdd(Answer1, Answer2, 2 * c, 2 * c);
+	}
+	else if (b_length == 1)
+	{
 		for (int k = 0; k < 2 * c; k++)
 		{
-			Answer2[k] = 0;
-			Answer1[k] = Answer3[k];
+			Answer3[k] = Answer1[k];
 		}
 		/*for (int k = 0; k < 2 * c; k++)
 		{
 			cout << "Answer1 [" << k << "] = " << Answer1[k] << "   " << "Answer3 [" << k << "] = " << Answer3[k] << endl;
 		}*/
-
 	}
 	return Answer3;
+}
+
+int* PowerToSquare(int A[], int a_length)
+{
+	int c = a_length;
+	int* Answer = new int[2 * c];
+	for (int i = 0; i < 2 * c; i++)
+	{
+		Answer[i] = 0;
+	}
+	Answer = LongMul(A, A, a_length, a_length);
+	cout << "Ответ (Вознесение числа в квадрат):" << endl;
+	for (int i = 0; i < 2 * c; i++)
+	{
+		cout << Answer[i] << "  ";
+	}
+	return Answer;
+}
+
+int* ConvertStrToNumber(string a, int a_length)
+{
+	int* Answer = new int[a_length];
+	for (int k = 0; k < a_length; k++)
+	{
+		Answer[k] = 0;
+	}
+	for (int i = 0; i < a_length; i++)
+	{
+		if (isdigit(a.at(i)) == 0)
+		{
+			Answer[i] = a.at(i) - '0' - 7;
+		}
+		else {
+			Answer[i] = a.at(i) - '0';
+		}
+	}
+	return Answer;
+}
+
+string ConvertNumberToStr(int A[], int size)
+{
+	string answer;
+	for (int i = 0; i < size; i++)
+	{
+		if (A[i] == 10)
+		{
+			answer = answer + "A";
+		}
+		else if (A[i] == 11)
+		{
+			answer = answer + "B";
+		}
+		else if (A[i] == 12)
+		{
+			answer = answer + "C";
+		}
+		else if (A[i] == 13)
+		{
+			answer = answer + "D";
+		}
+		else if (A[i] == 14)
+		{
+			answer = answer + "E";
+		}
+		else if (A[i] == 15)
+		{
+			answer = answer + "F";
+		}
+		else if (A[i] < 10) {
+			answer += to_string(A[i]);
+		}
+	}
+	return answer;
 }
 
 int main()
@@ -370,7 +445,9 @@ int main()
 	cin >> b;
 	a_length = a.length();
 	b_length = b.length();
-	for (i = 0; i < a_length; i++)
+	integ_A = ConvertStrToNumber(a, a_length);
+	integ_B = ConvertStrToNumber(b, b_length);
+	/*for (i = 0; i < a_length; i++)
 	{
 		if (isdigit(a.at(i)) == 0)
 		{
@@ -389,22 +466,34 @@ int main()
 		else {
 			B[i] = b.at(i) - '0';
 		}
-	}
+	}*/
+	cout << "Число А:" << endl;
 	for (i = 0; i < a_length; i++)
 	{
-		cout << A[i] << " ";
+		cout << integ_A[i] << " ";
 	}
 	cout << endl;
+	cout << "Число В:" << endl;
 	for (i = 0; i < b_length; i++)
 	{
-		cout << B[i] << " ";
+		cout << integ_B[i] << " ";
 	}
 	cout << endl;
+	/*cout << "Переводим числа А и В обратно в символьную запись строки" << endl;
+	string A_as_string;
+	string B_as_string;
+	A_as_string = ConvertNumberToStr(integ_A, a_length);
+	B_as_string = ConvertNumberToStr(integ_B, b_length);
+	cout << "Число А как символная запись:" << endl;
+	cout << A_as_string << endl;
+	cout << "Число В как символьная запись:" << endl;
+	cout << B_as_string << endl;*/
 	AnswerAdd = LongAdd(integ_A, integ_B, a_length, b_length);
 	string Answer1;
 	if (AnswerAdd[Max(a_length, b_length) + 1] == 100)
 	{
-		for (i = 0; i < Max(a_length, b_length) + 1; i++)
+		Answer1 = ConvertNumberToStr(AnswerAdd, Max(a_length, b_length) + 1);
+		/*for (i = 0; i < Max(a_length, b_length) + 1; i++)
 		{
 			if (AnswerAdd[i] == 10)
 			{
@@ -433,11 +522,12 @@ int main()
 			else if (AnswerAdd[i] < 10) {
 				Answer1 += to_string(AnswerAdd[i]);
 			}
-		}
+		}*/
 	}
 	else if (AnswerAdd[Max(a_length, b_length) + 1] == 0)
 	{
-		for (i = 0; i < Max(a_length, b_length); i++)
+		Answer1 = ConvertNumberToStr(AnswerAdd, Max(a_length, b_length));
+		/*for (i = 0; i < Max(a_length, b_length); i++)
 		{
 			if (AnswerAdd[i] == 10)
 			{
@@ -466,7 +556,7 @@ int main()
 			else if (AnswerAdd[i] < 10) {
 				Answer1 += to_string(AnswerAdd[i]);
 			}
-		}
+		}*/
 	}
 	cout << "Результат А + В в 16-чной системе исчисления:" << endl;
 	cout << Answer1;
@@ -527,7 +617,8 @@ int main()
 	int* AnswerLongMul;
 	AnswerLongMul = LongMul(integ_A, integ_B, a_length, b_length);
 	string Answer4;
-	for (i = 0; i < 2*Max(a_length, b_length); i++)
+	Answer4 = ConvertNumberToStr(AnswerLongMul, 2 * Max(a_length, b_length));
+	/*for (i = 0; i < 2*Max(a_length, b_length); i++)
 	{
 		if (AnswerLongMul[i] == 10)
 		{
@@ -556,10 +647,21 @@ int main()
 		else if (AnswerLongMul[i] < 10) {
 			Answer4 += to_string(AnswerLongMul[i]);
 		}
+	}*/
+	if (b_length > 1)
+	{
+		while (Answer4.at(0) == '0')
+		{
+			Answer4.erase(0, 1);
+		}
 	}
-	while (Answer4.at(0) == '0')
+	else if (b_length == 1)
 	{
 		Answer4.erase(0, 1);
+		while (Answer4.at(0) == '0')
+		{
+			Answer4.erase(0, 1);
+		}
 	}
 	cout << endl;
 	cout << "Результат умножения числа А на число В в 16-чной системе исчисления:" << endl;
@@ -579,7 +681,8 @@ int main()
 			Answer2 = "Отрицательное значение!!! ";
 		}
 		else {
-			for (i = 0; i < Max(a_length, b_length); i++)
+			Answer2 = ConvertNumberToStr(AnswerSub, Max(a_length, b_length));
+			/*for (i = 0; i < Max(a_length, b_length); i++)
 			{
 				if (AnswerSub[i] == 10)
 				{
@@ -608,7 +711,7 @@ int main()
 				else if (AnswerSub[i] < 10) {
 					Answer2 += to_string(AnswerSub[i]);
 				}
-			}
+			}*/
 		}
 		cout << "Результат А - В в 16-чной системе исчисления:" << endl;
 		cout << Answer2 << endl;
@@ -617,12 +720,100 @@ int main()
 		{
 			if (isdigit(a.at(i)) == 0)
 			{
-				A[i] = a.at(i) - '0' - 7;
+				integ_A[i] = a.at(i) - '0' - 7;
 			}
 			else {
-				A[i] = a.at(i) - '0';
+				integ_A[i] = a.at(i) - '0';
 			}
 		}
 	}
+	cout << endl;
+	cout << "Возносим число А в квадрат" << endl;
+	int* AnswerPowerToSquare1;
+	string Answer5;
+	AnswerPowerToSquare1 = PowerToSquare(integ_A, a_length);
+	Answer5 = ConvertNumberToStr(AnswerPowerToSquare1, 2 * a_length);
+	/*for (i = 0; i < 2 * a_length; i++)
+	{
+		if (AnswerPowerToSquare1[i] == 10)
+		{
+			Answer5 = Answer5 + "A";
+		}
+		else if (AnswerPowerToSquare1[i] == 11)
+		{
+			Answer5 = Answer5 + "B";
+		}
+		else if (AnswerPowerToSquare1[i] == 12)
+		{
+			Answer5 = Answer5 + "C";
+		}
+		else if (AnswerPowerToSquare1[i] == 13)
+		{
+			Answer5 = Answer5 + "D";
+		}
+		else if (AnswerPowerToSquare1[i] == 14)
+		{
+			Answer5 = Answer5 + "E";
+		}
+		else if (AnswerPowerToSquare1[i] == 15)
+		{
+			Answer5 = Answer5 + "F";
+		}
+		else if (AnswerPowerToSquare1[i] < 10) {
+			Answer5 += to_string(AnswerPowerToSquare1[i]);
+		}
+	}*/
+	while (Answer5.at(0) == '0')
+	{
+		Answer5.erase(0, 1);
+	}
+	cout << endl;
+	cout << "Результат вознесения числа А в квадрат в 16-чной системе исчисления:" << endl;
+	cout << Answer5 << endl;
+	delete[]AnswerPowerToSquare1;
+	cout << endl;
+	cout << "Возносим число В в квадрат" << endl;
+	int* AnswerPowerToSquare2;
+	string Answer6;
+	AnswerPowerToSquare2 = PowerToSquare(integ_B, b_length);
+	Answer6 = ConvertNumberToStr(AnswerPowerToSquare2, 2 * b_length);
+	/*for (i = 0; i < 2 * b_length; i++)
+	{
+		if (AnswerPowerToSquare2[i] == 10)
+		{
+			Answer6 = Answer6 + "A";
+		}
+		else if (AnswerPowerToSquare2[i] == 11)
+		{
+			Answer6 = Answer6 + "B";
+		}
+		else if (AnswerPowerToSquare2[i] == 12)
+		{
+			Answer6 = Answer6 + "C";
+		}
+		else if (AnswerPowerToSquare2[i] == 13)
+		{
+			Answer6 = Answer6 + "D";
+		}
+		else if (AnswerPowerToSquare2[i] == 14)
+		{
+			Answer6 = Answer6 + "E";
+		}
+		else if (AnswerPowerToSquare2[i] == 15)
+		{
+			Answer6 = Answer6 + "F";
+		}
+		else if (AnswerPowerToSquare2[i] < 10) {
+			Answer6 += to_string(AnswerPowerToSquare2[i]);
+		}
+	}*/
+	while (Answer6.at(0) == '0')
+	{
+		Answer6.erase(0, 1);
+	}
+	cout << endl;
+	cout << "Результат вознесения числа В в квадрат в 16-чной системе исчисления:" << endl;
+	cout << Answer6 << endl;
+	delete[]AnswerPowerToSquare2;
 	return 0;
 }
