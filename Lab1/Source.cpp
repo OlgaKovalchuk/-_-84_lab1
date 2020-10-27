@@ -99,13 +99,13 @@ int* LongAdd(int A[], int B[], int a_length, int b_length)
 		Answer[1] = Answer[1] - ((Answer[1]) / 16) * 16;
 		Answer[0] = Answer[0] / 16;
 		Answer[c + 1] = 100;
-		cout << "Ответ (Результат суммирования двух чисел):" << endl;
+		/*cout << "Ответ (Результат суммирования двух чисел):" << endl;
 		for (int i = 0; i < c + 1; i++)
 		{
 			cout << Answer[i] << "  ";
-		}
+		}*/
 	}
-	else if (Answer[0] < 16)
+	/*else if (Answer[0] < 16)
 	{
 		cout << "Ответ (Результат сумирования двух чисел):" << endl;
 		for (int i = 0; i < c; i++)
@@ -113,7 +113,7 @@ int* LongAdd(int A[], int B[], int a_length, int b_length)
 			cout << Answer[i] << "  ";
 		}
 	}
-	cout << endl;
+	cout << endl;*/
 	return Answer;
 }
 
@@ -199,11 +199,11 @@ int* LongSub(int A[], int B[], int a_length, int b_length)
 		Answer[c] = borrow;
 	}
 	else {
-		cout << "Ответ (Результат разницы двух чисел):" << endl;
+		/*cout << "Ответ (Результат разницы двух чисел):" << endl;
 		for (int i = 0; i < c; i++)
 		{
 			cout << Answer[i] << "  ";
-		}
+		}*/
 	}
 	cout << endl;
 	return Answer;
@@ -244,19 +244,19 @@ int* LongMulOneDigit(int A[], int digit_from_str, int a_length)
 		}
 		Answer[1] = Answer[1] - ((Answer[1]) / 16) * 16;
 		Answer[0] = Answer[0] / 16;
-		cout << "Ответ (Результат умножения числа А на " <<digit_from_str<<" ):"<< endl;
+		/*cout << "Ответ (Результат умножения числа А на " <<digit_from_str<<" ):"<< endl;
 		for (int i = 0; i < c + 1; i++)
 		{
 			cout << Answer[i] << "  ";
-		}
+		}*/
 	}
 	else if (Answer[0] < 16)
 	{
-		cout << "Ответ (Результат умножения числа А на " << digit_from_str << " ):" << endl;
+		/*cout << "Ответ (Результат умножения числа А на " << digit_from_str << " ):" << endl;
 		for (int i = 0; i < c; i++)
 		{
 			cout << Answer[i] << "  ";
-		}
+		}*/
 	}
 	cout << endl;
 	return Answer;
@@ -282,14 +282,14 @@ int* LongMul(int A[], int B[], int a_length, int b_length)
 		for (int i = 1; i < c+1; i++)
 		{
 			Answer1[2 * c - i] = Answer1[2 * c - i] + temp1[c - i];
-			cout << "Answer1 [" << 2 * c - i << "] = " << Answer1[2 * c - i] << endl;
+			//cout << "Answer1 [" << 2 * c - i << "] = " << Answer1[2 * c - i] << endl;
 		}
 	}
 	else if(temp1[c+1] == 17){
 		for (int i = 1; i < c + 2; i++)
 		{
 			Answer1[2 * c - i] = Answer1[2 * c - i] + temp1[c - i + 1];
-			cout << "Answer1 [" << 2 * c - i << "] = " << Answer1[2 * c - i] << endl;
+			//cout << "Answer1 [" << 2 * c - i << "] = " << Answer1[2 * c - i] << endl;
 		}
 	}
 	/*for (int i = 1; i < c + 2; i++)
@@ -360,11 +360,11 @@ int* PowerToSquare(int A[], int a_length)
 		Answer[i] = 0;
 	}
 	Answer = LongMul(A, A, a_length, a_length);
-	cout << "Ответ (Вознесение числа в квадрат):" << endl;
+	/*cout << "Ответ (Вознесение числа в квадрат):" << endl;
 	for (int i = 0; i < 2 * c; i++)
 	{
 		cout << Answer[i] << "  ";
-	}
+	}*/
 	return Answer;
 }
 
@@ -424,6 +424,159 @@ string ConvertNumberToStr(int A[], int size)
 	return answer;
 }
 
+int CompareNum(int A[], int B[], int a_length, int b_length)
+{
+	int answer;
+	if (a_length > b_length)
+	{
+		answer = 1;
+	}
+	else if (a_length < b_length)
+	{
+		answer = 0;
+	}
+	else if (a_length == b_length)
+	{
+		if (A[0] < B[0])
+		{
+			answer = 0;  //Число А меньше числа В
+		}
+		else if (A[0] > B[0])
+		{
+			answer = 1;  //Число А больше числа В
+		}
+		else if (A[0] == B[0])
+		{
+			int i = 1;
+			while ((A[i] == B[i]) && i != Max(a_length, b_length))
+			{
+				answer = 2;
+				i++;
+			}
+			if (i == Max(a_length, b_length) && A[i] == B[i])
+			{
+				answer = 2;
+			}
+			else if (i != Max(a_length, b_length) && A[i] < B[i])
+			{
+				answer = 0;
+			}
+			else if (i != Max(a_length, b_length) && A[i] > B[i])
+			{
+				answer = 0;
+			}
+		}
+	}
+	return answer;
+}
+
+int* LongShiftBitsToHigh(int B[], int number_of_cells_shift, int b_length)
+{
+	int* NewB = new int[b_length + number_of_cells_shift];
+	for (int k = 0; k < b_length + number_of_cells_shift; k++)
+	{
+		NewB[k] = 0;
+	}
+	for (int i = 0; i < b_length; i++)
+	{
+		NewB[i] = B[i];
+	}
+	return NewB;
+}
+
+int SizeOfArray(int A[])
+{
+	int size_limit = 1000;
+	int size_of_array = 0;
+	int i = 0;
+	while ((A[i] == 0 || A[i] == 1 || A[i] == 2 || A[i] == 3 || A[i] == 4 || A[i] == 5 || A[i] == 6 || A[i] == 7 || A[i] == 8 || A[i] == 9 || A[i] == 10 || A[i] == 11 || A[i] == 12 || A[i] == 13 || A[i] == 14 || A[i] == 15)
+		&& i <size_limit+1)
+	{
+		size_of_array++;
+		i++;
+	}
+	return size_of_array;
+}
+
+int** LongDivModul(int A[], int B[], int a_length)
+{
+	int b_length = SizeOfArray(B);
+	int *Answer[2];
+	int** AnswerPointer = Answer;
+	int Q[1] = { 1 };
+	int* Q_pointer = Q;
+	int* Ostacha = new int [a_length];
+	int* Chastka = new int[a_length];
+	int* Answer1;
+	int* NewB;
+	for (int i = 0; i < a_length; i++)
+	{
+		Chastka[i] = 0;
+	}
+	for (int i = 0; i < a_length ; i++)
+	{
+		Ostacha[i] = A[i];
+	}
+	while (CompareNum(Ostacha, B, a_length, b_length) == 1 || CompareNum(Ostacha, B, a_length, b_length) == 2)
+	{
+		int length_Ostacha = SizeOfArray(Ostacha);
+		NewB = LongShiftBitsToHigh(B, length_Ostacha - b_length, b_length);
+		b_length = SizeOfArray(NewB);
+		if (CompareNum(Ostacha, NewB, length_Ostacha, b_length) == 0)
+		{
+			length_Ostacha--;
+			NewB = LongShiftBitsToHigh(B, length_Ostacha - b_length, b_length);
+		}
+		Answer1 = LongSub(Ostacha, NewB, length_Ostacha, b_length);
+		Ostacha = Answer1;
+		Chastka = LongAdd(Chastka, Q, a_length, 1);
+		Ostacha = Answer1;
+	}
+	Answer[0] = Chastka;
+	Answer[1] = Ostacha;
+	return AnswerPointer;
+}
+
+int* DvoichnaForma(int A[], int a_length)
+{
+	int* Dvoich_A = new int[4 * a_length];
+	int ostacha;
+	for (int i = 0; i < a_length; i++)
+	{
+		ostacha = A[i];
+		Dvoich_A[4 * i + 3] = ostacha % 2;
+		ostacha = ostacha / 2;
+		Dvoich_A[4 * i + 2] = ostacha % 2;
+		ostacha = ostacha / 2;
+		Dvoich_A[4 * i + 1] = ostacha % 2;
+		ostacha = ostacha / 2;
+		Dvoich_A[4 * i] = ostacha % 2;
+		ostacha = ostacha / 2;
+	}
+	return Dvoich_A;
+}
+
+int* LongPower(int A[], int B[], int a_length, int b_length)
+{
+	int* Answer = new int[a_length];
+	Answer[0] = 1;
+	for (int i = 1; i < a_length; i++)
+	{
+		Answer[i] = 0;
+	}
+	int* Dvoich_B = DvoichnaForma(B, b_length);
+	for (int j = 0; j < 4 * b_length; j++)
+	{
+		Answer = PowerToSquare(Answer, a_length);
+		if (Dvoich_B[j] == 1)
+		{
+			Answer = LongMul(Answer, A, a_length, a_length);
+		}
+		//Answer = PowerToSquare(Answer, a_length);
+	}
+	return Answer;
+}
+
 int main()
 {
 	setlocale(LC_ALL, "ru_RU");
@@ -479,15 +632,20 @@ int main()
 		cout << integ_B[i] << " ";
 	}
 	cout << endl;
-	/*cout << "Переводим числа А и В обратно в символьную запись строки" << endl;
-	string A_as_string;
-	string B_as_string;
-	A_as_string = ConvertNumberToStr(integ_A, a_length);
-	B_as_string = ConvertNumberToStr(integ_B, b_length);
-	cout << "Число А как символная запись:" << endl;
-	cout << A_as_string << endl;
-	cout << "Число В как символьная запись:" << endl;
-	cout << B_as_string << endl;*/
+	/*int* AnswerDvoichFormA = DvoichnaForma(integ_A, a_length);
+	int* AnswerDvoichFormB = DvoichnaForma(integ_B, b_length);
+	cout << "Число А в двоичной форме: " << endl;
+	for (int i = 0; i < 4 * a_length; i++)
+	{
+		cout << AnswerDvoichFormA[i] << "  ";
+	}
+	cout << endl;
+	cout << "Число B в двоичной форме: " << endl;
+	for (int i = 0; i < 4 * b_length; i++)
+	{
+		cout << AnswerDvoichFormB[i] << "  ";
+	}
+	cout << endl;*/
 	AnswerAdd = LongAdd(integ_A, integ_B, a_length, b_length);
 	string Answer1;
 	if (AnswerAdd[Max(a_length, b_length) + 1] == 100)
@@ -728,7 +886,7 @@ int main()
 		}
 	}
 	cout << endl;
-	cout << "Возносим число А в квадрат" << endl;
+	cout << "Возводим число А в квадрат" << endl;
 	int* AnswerPowerToSquare1;
 	string Answer5;
 	AnswerPowerToSquare1 = PowerToSquare(integ_A, a_length);
@@ -772,7 +930,7 @@ int main()
 	cout << Answer5 << endl;
 	delete[]AnswerPowerToSquare1;
 	cout << endl;
-	cout << "Возносим число В в квадрат" << endl;
+	cout << "Возводим число В в квадрат" << endl;
 	int* AnswerPowerToSquare2;
 	string Answer6;
 	AnswerPowerToSquare2 = PowerToSquare(integ_B, b_length);
@@ -815,5 +973,12 @@ int main()
 	cout << "Результат вознесения числа В в квадрат в 16-чной системе исчисления:" << endl;
 	cout << Answer6 << endl;
 	delete[]AnswerPowerToSquare2;
+	/*cout << "Деление числа А на число В" << endl;
+	int** AnswerLongDivMod = LongDivModul(A, B, a_length);
+	int* Chastka = AnswerLongDivMod[0];
+	int* Ostacha = AnswerLongDivMod[1];
+	cout << "Результат деления числа А на число В:"<<Chastka << endl;
+	cout << "Остаток от деления числа А на число В:" << Ostacha << endl;
+	delete[] AnswerLongDivMod;*/
 	return 0;
 }
