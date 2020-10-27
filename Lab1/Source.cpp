@@ -99,7 +99,7 @@ int* LongAdd(int A[], int B[], int a_length, int b_length)
 		Answer[1] = Answer[1] - ((Answer[1]) / 16) * 16;
 		Answer[0] = Answer[0] / 16;
 		Answer[c + 1] = 100;
-		cout << "Ответ:" << endl;
+		cout << "Ответ (Результат суммирования двух чисел):" << endl;
 		for (int i = 0; i < c + 1; i++)
 		{
 			cout << Answer[i] << "  ";
@@ -107,7 +107,7 @@ int* LongAdd(int A[], int B[], int a_length, int b_length)
 	}
 	else if (Answer[0] < 16)
 	{
-		cout << "Ответ:" << endl;
+		cout << "Ответ (Результат сумирования двух чисел):" << endl;
 		for (int i = 0; i < c; i++)
 		{
 			cout << Answer[i] << "  ";
@@ -199,7 +199,7 @@ int* LongSub(int A[], int B[], int a_length, int b_length)
 		Answer[c] = borrow;
 	}
 	else {
-		cout << "Ответ:" << endl;
+		cout << "Ответ (Результат разницы двух чисел):" << endl;
 		for (int i = 0; i < c; i++)
 		{
 			cout << Answer[i] << "  ";
@@ -212,8 +212,8 @@ int* LongSub(int A[], int B[], int a_length, int b_length)
 int* LongMulOneDigit(int A[], int digit_from_str, int a_length)
 {
 	int c = a_length;
-	int* Answer = new int[c + 1];
-	for (int k = 0; k < c + 1; k++)
+	int* Answer = new int[c + 2];
+	for (int k = 0; k < c + 2; k++)
 	{
 		Answer[k] = 0;
 	}
@@ -222,28 +222,29 @@ int* LongMulOneDigit(int A[], int digit_from_str, int a_length)
 		int temp = A[j] * digit_from_str;
 		if (temp > 15)
 		{
-			Answer[j] = Answer[j] + temp - (temp / 16) * 16;
-			Answer[j - 1] = Answer[j - 1] + (temp / 16);
+			Answer[j - 1] = Answer[j - 1] + ((Answer[j] + temp) / 16);
+			Answer[j] = Answer[j] + temp - ((Answer[j] + temp) / 16) * 16;
 		}
 		else {
 			Answer[j] = Answer[j] + temp;
 			if (Answer[j] > 15)
 			{
-				Answer[j] = Answer[j] - (Answer[j] / 16) * 16;
 				Answer[j - 1] = Answer[j - 1] + (Answer[j] / 16);
+				Answer[j] = Answer[j] - (Answer[j] / 16) * 16;
 			}
 		}
 	}
 	Answer[0] = Answer[0] + A[0] * digit_from_str;
 	if(Answer[0] > 15)
 	{
+		Answer[c + 1] = 17;
 		for (int i = c; i > 0; i--)
 		{
 			Answer[i] = Answer[i - 1];
 		}
 		Answer[1] = Answer[1] - ((Answer[1]) / 16) * 16;
 		Answer[0] = Answer[0] / 16;
-		cout << "Ответ:" << endl;
+		cout << "Ответ (Результат умножения числа А на " <<digit_from_str<<" ):"<< endl;
 		for (int i = 0; i < c + 1; i++)
 		{
 			cout << Answer[i] << "  ";
@@ -251,7 +252,7 @@ int* LongMulOneDigit(int A[], int digit_from_str, int a_length)
 	}
 	else if (Answer[0] < 16)
 	{
-		cout << "Ответ:" << endl;
+		cout << "Ответ (Результат умножения числа А на " << digit_from_str << " ):" << endl;
 		for (int i = 0; i < c; i++)
 		{
 			cout << Answer[i] << "  ";
@@ -261,26 +262,92 @@ int* LongMulOneDigit(int A[], int digit_from_str, int a_length)
 	return Answer;
 }
 
-/*int* LongMul(int A[], int B[], int a_length, int b_length)
+int* LongMul(int A[], int B[], int a_length, int b_length)
 {
 	int c = Max(a_length, b_length);
-	int* Answer = new int[2*c];
+	int* Answer1 = new int[2*c];
+	int* Answer2 = new int[2 * c];
+	int* Answer3 = new int[2 * c];
 	int i = 2*c - 1;
 	int* temp1;
 	int* temp2;
-	for (int k = 0; k < 2*c + 1; k++)
+	for (int k = 0; k < 2*c; k++)
 	{
-		Answer[k] = 0;
+		Answer1[k] = 0;
+		Answer2[k] = 0;
+		Answer3[k] = 0;
 	}
-	for (int i = 1; i < c + 1; i++)
+	temp1 = LongMulOneDigit(A, B[b_length - 1], a_length);
+	if (temp1[c+1] == 0) {
+		for (int i = 1; i < c+1; i++)
+		{
+			Answer1[2 * c - i] = Answer1[2 * c - i] + temp1[c - i];
+			cout << "Answer1 [" << 2 * c - i << "] = " << Answer1[2 * c - i] << endl;
+		}
+	}
+	else if(temp1[c+1] == 17){
+		for (int i = 1; i < c + 2; i++)
+		{
+			Answer1[2 * c - i] = Answer1[2 * c - i] + temp1[c - i + 1];
+			cout << "Answer1 [" << 2 * c - i << "] = " << Answer1[2 * c - i] << endl;
+		}
+	}
+	/*for (int i = 1; i < c + 2; i++)
 	{
-		temp1 = LongMulOneDigit(A, B[b_length - i], a_length);
-		Answer[2 * c - i] = Answer[2*c - i] + temp1[i - 1];
-		temp2 = LongMulOneDigit(A, B[b_length - i -1], a_length);
-		Answer[2 * c - i - 1] = Answer[2 * c - i - 1] + temp2[i - 1];
+		Answer1[2 * c - i] = Answer1[2 * c - i] + temp1[c - i + 1];
+		cout << "Answer1 [" << 2 * c - i << "] = " << Answer1[2 * c - i] << endl;
+	}*/
+	for (int j = 1; j < b_length; j++)
+	{
+		temp2 = LongMulOneDigit(A, B[b_length - j - 1], a_length);
+		if (temp2[c+1] == 0)
+		{
+			for (int i = 1; i < c + 1; i++)
+			{
+				Answer2[2 * c - i - j] = Answer2[2 * c - i - j] + temp2[c - i];
+			}
+		}
+		else if(temp2[c+1] == 17){
+			for (int i = 1; i < c + 2; i++)
+			{
+				Answer2[2 * c - i - j] = Answer2[2 * c - i - j] + temp2[c - i + 1];
+			}
+		}
+		/*for (int i = 1; i < c + 2; i++)
+		{
+			if (temp2[c] == 0)
+			{
+				Answer2[2 * c - i - j] = Answer2[2 * c - i - j] + temp2[c - i];
+			}
+			else {
+				Answer2[2 * c - i - j] = Answer2[2 * c - i - j] + temp2[c - i + 1];
+			}
+			//Answer2[2 * c - i - j] = Answer2[2 * c - i - j] + temp2[c - i + 1];
+		}*/
+		/*cout << "Answer1:" << endl;
+		for (int i = 0; i < 2 * c; i++)
+		{
+			cout << "Answer1[" <<i<<"] = " <<Answer1[i]<< endl;
+		}
+		cout << "Answer2:" << endl;
+		for (int i = 0; i < 2 * c; i++)
+		{
+			cout << "Answer2[" << i << "] = " << Answer2[i] << endl;
+		}*/
+		Answer3 = LongAdd(Answer1, Answer2, 2 * c, 2 * c);
+		for (int k = 0; k < 2 * c; k++)
+		{
+			Answer2[k] = 0;
+			Answer1[k] = Answer3[k];
+		}
+		/*for (int k = 0; k < 2 * c; k++)
+		{
+			cout << "Answer1 [" << k << "] = " << Answer1[k] << "   " << "Answer3 [" << k << "] = " << Answer3[k] << endl;
+		}*/
+
 	}
-	return Answer;
-}*/
+	return Answer3;
+}
 
 int main()
 {
@@ -406,7 +473,7 @@ int main()
 	cout << endl;
 	delete[] AnswerAdd;
 	cout << endl;
-	string digit;
+	/*string digit;
 	cout << "Умножение числа А на константу" << endl;
 	cout << "Введите значение константы:" << endl;
 	cin >> digit;
@@ -454,10 +521,50 @@ int main()
 	}
 	cout << "Результат (число) А * (константа) " <<digit<<" в 16-чной системе исчисления:" << endl;
 	cout << Answer3 <<endl;
-	delete[]AnswerMulOneDigit;
+	delete[]AnswerMulOneDigit;*/
 	cout << endl;
-	//int* AnswerLongMul;
-	//AnswerLongMul = LongMul(integ_A, integ_B, a_length, b_length);
+	cout << "Умножаем число А на число В" << endl;
+	int* AnswerLongMul;
+	AnswerLongMul = LongMul(integ_A, integ_B, a_length, b_length);
+	string Answer4;
+	for (i = 0; i < 2*Max(a_length, b_length); i++)
+	{
+		if (AnswerLongMul[i] == 10)
+		{
+			Answer4 = Answer4 + "A";
+		}
+		else if (AnswerLongMul[i] == 11)
+		{
+			Answer4 = Answer4 + "B";
+		}
+		else if (AnswerLongMul[i] == 12)
+		{
+			Answer4 = Answer4 + "C";
+		}
+		else if (AnswerLongMul[i] == 13)
+		{
+			Answer4 = Answer4 + "D";
+		}
+		else if (AnswerLongMul[i] == 14)
+		{
+			Answer4 = Answer4 + "E";
+		}
+		else if (AnswerLongMul[i] == 15)
+		{
+			Answer4 = Answer4 + "F";
+		}
+		else if (AnswerLongMul[i] < 10) {
+			Answer4 += to_string(AnswerLongMul[i]);
+		}
+	}
+	while (Answer4.at(0) == '0')
+	{
+		Answer4.erase(0, 1);
+	}
+	cout << endl;
+	cout << "Результат умножения числа А на число В в 16-чной системе исчисления:" << endl;
+	cout << Answer4 << endl;
+	delete[]AnswerLongMul;
 	cout << "Отнимаем число В от числа А" << endl;
 	string Answer2;
 	if (a_length < b_length)
@@ -506,6 +613,16 @@ int main()
 		cout << "Результат А - В в 16-чной системе исчисления:" << endl;
 		cout << Answer2 << endl;
 		delete[] AnswerSub;
+		for (i = 0; i < a_length; i++) //Заполняем по новой масив А, потому что при операции "-" мы изменяли его запись
+		{
+			if (isdigit(a.at(i)) == 0)
+			{
+				A[i] = a.at(i) - '0' - 7;
+			}
+			else {
+				A[i] = a.at(i) - '0';
+			}
+		}
 	}
 	return 0;
 }
